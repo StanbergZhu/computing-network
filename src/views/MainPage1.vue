@@ -107,12 +107,13 @@ export default {
       dialogFormVisible:false,
       dialogScoreVisible:false,
       form:{},
-
-      userid: "",
       username: "",
+      userid: "",
     }
   },
   created() {
+    this.username = this.$route.query.username
+    this.userid = this.$route.query.userid
     this.load()
   },
   methods:{

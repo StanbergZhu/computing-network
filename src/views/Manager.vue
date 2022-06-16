@@ -32,13 +32,13 @@ export default {
       isCollapse: false,
       sideWidth:150,
       logoTextShow:true,
-      user_name: "null"
+      user_name: ""
     }
   },
 
   created() {
     //加载用户名
-    this.user_name = this.$route.query
+    this.user_name = this.$route.query.username
   },
   components:{
     Aside,
