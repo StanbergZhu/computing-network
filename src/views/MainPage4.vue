@@ -124,9 +124,6 @@ export default {
           pageSize:this.pageSize,
           pageNum:this.pageNum,
           address:this.address,
-          meal_id:this.meal_id,
-          meal_name:this.meal_name,
-
         }
       }).then(res =>{
         console.log(res)
