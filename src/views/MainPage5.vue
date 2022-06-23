@@ -95,7 +95,7 @@ export default {
   name: "MainPage",
   data(){
     return{
-      tableData: ["e"],
+      tableData: [],
       total: 0,
       pageNum: 1,
       pageSize: 5,
