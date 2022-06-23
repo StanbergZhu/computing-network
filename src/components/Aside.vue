@@ -18,8 +18,8 @@
         <span slot="title">鼓楼校区</span>
       </template>
 
-      <el-menu-item index="/main_page1" style="padding-left: 50px" >一食堂</el-menu-item>
-      <el-menu-item index="/main_page2" style="padding-left: 50px" >二食堂</el-menu-item>
+      <el-menu-item @click="choose1" style="padding-left: 50px" >一食堂</el-menu-item>
+      <el-menu-item @click="choose2" style="padding-left: 50px" >二食堂</el-menu-item>
 
     </el-submenu>
 
@@ -29,9 +29,9 @@
         <span slot="title">仙林校区</span>
       </template>
 
-      <el-menu-item index="/main_page4" style="padding-left: 50px" >四食堂</el-menu-item>
-      <el-menu-item index="/main_page5" style="padding-left: 50px" >五食堂</el-menu-item>
-      <el-menu-item index="/main_page6" style="padding-left: 50px" >六食堂</el-menu-item>
+      <el-menu-item @click="choose4" style="padding-left: 50px" >四食堂</el-menu-item>
+      <el-menu-item @click="choose5" style="padding-left: 50px" >五食堂</el-menu-item>
+      <el-menu-item @click="choose6" style="padding-left: 50px" >六食堂</el-menu-item>
 
     </el-submenu>
 
@@ -41,10 +41,42 @@
 <script>
 export default {
   name: "Aside",
+  data(){
+    return{
+      address: 1
+    }
+  },
   props:{
     isCollapse: Boolean,
     logoTextShow: Boolean,
   },
+  methods:{
+    choose1(){
+      console.log("to 1")
+      this.address = 1;
+      this.$emit('chooseAdd',this.address)
+    },
+    choose2(){
+      console.log("to 2")
+      this.address = 2;
+      this.$emit('chooseAdd',this.address)
+    },
+    choose4(){
+      console.log("to 4")
+      this.address = 4;
+      this.$emit('chooseAdd',this.address)
+    },
+    choose5(){
+      console.log("to 5")
+      this.address = 5;
+      this.$emit('chooseAdd',this.address)
+    },
+    choose6(){
+      console.log("to 6")
+      this.address = 6;
+      this.$emit('chooseAdd',this.address)
+    }
+  }
 }
 </script>
 

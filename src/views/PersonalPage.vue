@@ -3,7 +3,7 @@
 <div>
   <div style="margin-bottom: 20px; height: 10px">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: 'main_page1' }" class="el-icon-s-home">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: 'main_page' }" class="el-icon-s-home">首页</el-breadcrumb-item>
       <el-breadcrumb-item class="el-icon-s-custom"><a href="/">个人界面</a></el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: 'login'}" class="el-icon-switch-button" >退出账户</el-breadcrumb-item>
       <el-breadcrumb-item></el-breadcrumb-item>
@@ -49,6 +49,7 @@
 <script>
 export default {
   name: "PersonalPage",
+  props:['address'],
   data(){
     return{
       username:"",
@@ -63,19 +64,22 @@ export default {
     this.userid = this.$route.query.userid
     this.load()
   },
-  load(){
-    this.request.get("/user",{
-      params:{
-        userid:this.userid,
-      }
-    }).then(res =>{
-      console.log(res)
-      this.username = res.username
-      this.userGender = res.userGender
-      this.userPhoneNumber = res.userPhoneNumber
-    })
-  },
   methods:{
+    load(){
+      this.request.get("/user",{
+        params:{
+          userid:this.userid,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.username = res.username
+        this.userGender = res.userGender
+        this.userPhoneNumber = res.userPhoneNumber
+      })
+    },
+    updatedata(){
+      this.load()
+    },
     editUserInformation(){
       this.dialogFormVisible = true
       this.form = {}

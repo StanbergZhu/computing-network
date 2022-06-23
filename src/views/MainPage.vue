@@ -2,7 +2,7 @@
   <div>
     <div style="margin-bottom: 20px; height: 10px">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: 'main_page1' }" class="el-icon-s-home">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: 'main_page' }" class="el-icon-s-home">主页</el-breadcrumb-item>
         <el-breadcrumb-item class="el-icon-s-custom"><a href="/">个人界面</a></el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: 'login'}" class="el-icon-switch-button" >退出账户</el-breadcrumb-item>
         <el-breadcrumb-item></el-breadcrumb-item>
@@ -93,13 +93,13 @@
 <script>
 export default {
   name: "MainPage",
+  props:['address'],
   data(){
     return{
       tableData: [],
       total: 0,
       pageNum: 1,
       pageSize: 5,
-      address: 1,
       meal_id: "",
       meal_name: "",
       meal_price: "",
@@ -130,6 +130,10 @@ export default {
         this.tableData = res.records
         this.total = res.total
       })
+    },
+    updatedata() {
+      console.log("update")
+      this.load()
     },
     handleNewMeal(){
       this.dialogFormVisible = true

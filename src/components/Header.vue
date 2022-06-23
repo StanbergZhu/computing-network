@@ -5,8 +5,7 @@
     </div>
 
     <el-dropdown style="width: 70px; cursor: pointer">
-
-      <span>{{username}}</span>
+      <span >{{username}}</span>
     </el-dropdown>
   </div>
 

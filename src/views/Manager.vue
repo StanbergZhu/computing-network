@@ -2,7 +2,7 @@
   <el-container style="min-height: 100vh;">
 
     <el-aside width="sideWidth + 'px'" style="background-color: rgb(238, 241, 246);box-shadow: 2px 0 6px rgb(0 21 41/40%)">
-      <Aside :isCollapse="isCollapse" :logoTextShow="logoTextShow"/>
+      <Aside :isCollapse="isCollapse" :logoTextShow="logoTextShow" @chooseAdd="getAddress"/>
     </el-aside>
 
     <el-container>
@@ -12,7 +12,7 @@
       </el-header>
 
       <el-main>
-        <router-view/>
+        <router-view :address="address" ref="view"/>
       </el-main>
 
     </el-container>
@@ -32,7 +32,8 @@ export default {
       isCollapse: false,
       sideWidth:150,
       logoTextShow:true,
-      user_name: ""
+      user_name: "",
+      address: 1
     }
   },
 
@@ -57,6 +58,11 @@ export default {
         this.logoTextShow = true
       }
     },
+    getAddress(msg){
+      this.address = msg;
+      console.log("get to "+this.address)
+      this.$refs.view.updatedata()
+    }
   }
 }
 </script>

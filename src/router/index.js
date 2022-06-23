@@ -12,11 +12,8 @@ const routes = [
     redirect:"/personal_page",
     children:[
       {path: 'personal_page', name: 'PersonalPage', component: () => import('../views/PersonalPage'),},
-      {path: 'main_page1', name: 'MainPage1', component: () => import('../views/MainPage1'),},
-      {path: 'main_page2', name: 'MainPage2', component: () => import('../views/MainPage2'),},
-      {path: 'main_page4', name: 'MainPage4', component: () => import('../views/MainPage4'),},
-      {path: 'main_page5', name: 'MainPage5', component: () => import('../views/MainPage5'),},
-      {path: 'main_page6', name: 'MainPage6', component: () => import('../views/MainPage6'),},
+      {path: 'main_page', name: 'MainPage', component: () => import('../views/MainPage'),},
+
     ]
   },
   {
