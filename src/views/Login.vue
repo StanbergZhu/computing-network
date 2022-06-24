@@ -46,7 +46,7 @@ export default {
             if(res.pass){//res有两个部分：pass（bool），userid
               this.$message.success("登录成功")
               this.$router.push({
-                path:"/",
+                path:"/manager",
                 query: {
                   username:this.user.username,
                   userid:res.userid

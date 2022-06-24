@@ -21,11 +21,11 @@
     </div>
 
     <el-table :data="tableData" border: stripe>
-      <el-table-column prop="meal_id" label="餐品ID" width="100" align="center">
+      <el-table-column prop="id" label="餐品ID" width="100" align="center">
       </el-table-column>
-      <el-table-column prop="meal_name" label="餐品名" width="540" align="center">
+      <el-table-column prop="name" label="餐品名" width="540" align="center">
       </el-table-column>
-      <el-table-column prop="meal_price" label="餐品价格/元" width="90" align="center">
+      <el-table-column prop="price" label="餐品价格/元" width="90" align="center">
       </el-table-column>
       <el-table-column prop="likes_num" label="点赞数" width="140" align="center">
       </el-table-column>
@@ -93,7 +93,7 @@
 <script>
 export default {
   name: "MainPage",
-  props:['address'],
+  props:['address','username','userid'],
   data(){
     return{
       tableData: [],
@@ -107,13 +107,9 @@ export default {
       dialogFormVisible:false,
       dialogScoreVisible:false,
       form:{},
-      username: "",
-      userid: "",
     }
   },
   created() {
-    this.username = this.$route.query.username
-    this.userid = this.$route.query.userid
     this.load()
   },
   methods:{
@@ -140,7 +136,7 @@ export default {
       this.form = {}
     },
     deleteMeal(meal){//向后台请求删除数据,参数:meal_id
-      this.request.delete("/meal/"+meal).then(res =>{
+      this.request.delete("/meal/"+meal+this.userid).then(res =>{
         if(res){
           this.$message.success("删除成功:)")
           this.load()

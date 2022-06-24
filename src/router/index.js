@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/manager',
     name: 'Manager',
     component: ()=>import('../views/Manager.vue'),
     redirect:"/personal_page",
@@ -17,9 +17,14 @@ const routes = [
     ]
   },
   {
-    path: '/login',
+    path: '/',
     name: 'Login',
-    component: ()=>import('../views/Login')
+    component: ()=>import('../views/Login'),
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: ()=>import('../views/Register')
   }
 
 ]

@@ -49,7 +49,7 @@
 <script>
 export default {
   name: "PersonalPage",
-  props:['address'],
+  props:['address','username','userid'],
   data(){
     return{
       username:"",
@@ -61,7 +61,6 @@ export default {
     }
   },
   created() {
-    this.userid = this.$route.query.userid
     this.load()
   },
   methods:{

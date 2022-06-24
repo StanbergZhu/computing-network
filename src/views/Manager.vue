@@ -12,7 +12,7 @@
       </el-header>
 
       <el-main>
-        <router-view :address="address" ref="view"/>
+        <router-view :address="address" :username="user_name" :userid="user_id" ref="view"/>
       </el-main>
 
     </el-container>
@@ -33,6 +33,7 @@ export default {
       sideWidth:150,
       logoTextShow:true,
       user_name: "",
+      user_id:"",
       address: 1
     }
   },
@@ -40,6 +41,7 @@ export default {
   created() {
     //加载用户名
     this.user_name = this.$route.query.username
+    this.user_id = this.$route.query.userid
   },
   components:{
     Aside,
