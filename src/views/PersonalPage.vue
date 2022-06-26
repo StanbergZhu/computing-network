@@ -1,20 +1,20 @@
-```html
+
 <template>
 <div>
   <div style="margin-bottom: 20px; height: 10px">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: 'main_page' }" class="el-icon-s-home">首页</el-breadcrumb-item>
-      <el-breadcrumb-item class="el-icon-s-custom"><a href="/">个人界面</a></el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: 'login'}" class="el-icon-switch-button" >退出账户</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: 'main_page' }" class="el-icon-s-home">主页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: 'personal_page' }" class="el-icon-s-custom">个人界面</el-breadcrumb-item>
+      <el-breadcrumb-item class="el-icon-switch-button" ><a href="/">退出账户</a></el-breadcrumb-item>
       <el-breadcrumb-item></el-breadcrumb-item>
     </el-breadcrumb>
   </div>
   <div>
     <el-descriptions  size="medium" border="border" column="1">
-      <el-descriptions-item label="用户名" labelStyle = "width:50%" contentStyle = "width: 50%">{{username}} </el-descriptions-item>
-      <el-descriptions-item label="ID" labelStyle = "width:50%" contentStyle = "width: 50%">{{userid}} </el-descriptions-item>
-      <el-descriptions-item label="性别" labelStyle = "width:50%" contentStyle = "width: 50%">{{userGender}} </el-descriptions-item>
-      <el-descriptions-item label="电话号码" labelStyle = "width:50%" contentStyle = "width: 50%">{{userPhoneNumber}} </el-descriptions-item>
+      <el-descriptions-item label="用户名" labelStyle = "width:50%" contentStyle = "width: 50%">{{user.username}} </el-descriptions-item>
+      <el-descriptions-item label="ID" labelStyle = "width:50%" contentStyle = "width: 50%">{{user.userid}} </el-descriptions-item>
+      <el-descriptions-item label="性别" labelStyle = "width:50%" contentStyle = "width: 50%">{{user.userGender}} </el-descriptions-item>
+      <el-descriptions-item label="电话号码" labelStyle = "width:50%" contentStyle = "width: 50%">{{user.userPhoneNumber}} </el-descriptions-item>
 
     </el-descriptions>
 
@@ -52,28 +52,46 @@ export default {
   props:['address','username','userid'],
   data(){
     return{
-      username:"",
-      userid:"",
-      userGender:"",
+      user:{
+        username:"",
+        userid: 0,
+        userGender:"",
+        userPhoneNumber:""
+      },
       dialogFormVisible:false,
-      userPhoneNumber:"",
       form:{}
     }
   },
   created() {
+    // console.log(this)
     this.load()
   },
   methods:{
+    async getUser(){
+      return (await this.request.get("user/getuser",{
+        params:{
+          userid:this.userid,
+        }
+      })).data
+    },
     load(){
-      this.request.get("/user",{
+      this.request.get("/user/getuser",{
         params:{
           userid:this.userid,
         }
       }).then(res =>{
         console.log(res)
-        this.username = res.username
-        this.userGender = res.userGender
-        this.userPhoneNumber = res.userPhoneNumber
+
+        this.user.username = res.username
+        if (res.sex === "male"){
+          this.user.userGender = "男"
+        }else {
+          this.user.userGender = "女"
+        }
+
+        this.user.userPhoneNumber = res.telephone
+        this.user.userid = this.userid
+        console.log(this)
       })
     },
     updatedata(){
@@ -84,8 +102,21 @@ export default {
       this.form = {}
     },
     saveUserInformation(){
-      this.request.post("/user",this.userid,this.form).then(res =>{
+      this.request.get("/user/update",{
+        params:{
+          userid: this.user.userid,
+          name: this.form.username,
+          sex: this.form.userGender==="男" ? "male" :"female",
+          telephone:this.form.userPhoneNumber
+        }
+      }).then(res =>{
         if(res){
+
+          this.getUser().then(res=>{
+            res.token = JSON.parse(localStorage.getItem("username")).token
+            localStorage.setItem("username",JSON.stringify(res))
+          })
+          this.$emit("updateUser")
           this.$message.success("保存成功:)")
           this.dialogFormVisible = false
           this.load()

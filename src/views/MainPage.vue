@@ -3,16 +3,15 @@
     <div style="margin-bottom: 20px; height: 10px">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: 'main_page' }" class="el-icon-s-home">主页</el-breadcrumb-item>
-        <el-breadcrumb-item class="el-icon-s-custom"><a href="/">个人界面</a></el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: 'login'}" class="el-icon-switch-button" >退出账户</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: 'personal_page' }" class="el-icon-s-custom">个人界面</el-breadcrumb-item>
+        <el-breadcrumb-item class="el-icon-switch-button" ><a href="/">退出账户</a></el-breadcrumb-item>
         <el-breadcrumb-item></el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
     <div style="margin: 10px 0; height: 25px">
-      <el-input style="width: 140px" placeholder="请输入餐品ID" suffix-icon="el-icon-date" v-model="meal_id"></el-input>
-      <el-input style="width: 140px; margin-left: 5px" placeholder="请输入餐品名" suffix-icon="el-icon-food" v-model="meal_name"></el-input>
-      <el-button style="margin-left: 5px" type="primary" @click="load">搜索</el-button>
+      <el-input style="width: 140px" placeholder="请输入餐品名" suffix-icon="el-icon-food" v-model="meal_name"></el-input>
+      <el-button style="margin-left: 5px" type="primary" @click="search">搜索</el-button>
       <el-button style="margin-left: 5px" type="warning" @click="reset">重置</el-button>
     </div>
 
@@ -27,12 +26,12 @@
       </el-table-column>
       <el-table-column prop="price" label="餐品价格/元" width="90" align="center">
       </el-table-column>
-      <el-table-column prop="likes_num" label="点赞数" width="140" align="center">
+      <el-table-column prop="likes" label="点赞数" width="140" align="center">
       </el-table-column>
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button type="success" @click="handleLike(scope.row.meal_id)"><i class="el-icon-thumb"></i></el-button>
+          <el-button type="success" @click="handleLike(scope.row.id)"><i class="el-icon-thumb"></i></el-button>
           <el-popconfirm
               style="margin-left: 5px"
               confirm-button-text='确定'
@@ -40,7 +39,7 @@
               icon="el-icon-info"
               icon-color="red"
               title="您确认删除吗？"
-              @confirm="deleteMeal(scope.row.meal_id)"
+              @confirm="deleteMeal(scope.row.id)"
           >
             <el-button type="danger" slot="reference"><i class="el-icon-delete"></i> </el-button>
           </el-popconfirm>
@@ -100,10 +99,13 @@ export default {
       total: 0,
       pageNum: 1,
       pageSize: 5,
+      address: 1,
+      username: "",
+      userid: 0,
       meal_id: "",
       meal_name: "",
-      meal_price: "",
-      likes_num: "",
+      meal_price: 0,
+      likes_num: 0,
       dialogFormVisible:false,
       dialogScoreVisible:false,
       form:{},
@@ -119,7 +121,7 @@ export default {
         params:{
           pageSize:this.pageSize,
           pageNum:this.pageNum,
-          address:this.address,
+          address:this.$props.address,
         }
       }).then(res =>{
         console.log(res)
@@ -127,7 +129,23 @@ export default {
         this.total = res.total
       })
     },
-    updatedata() {
+    search(){
+      this.request.get("/meal/search",{
+        params:{
+          pageSize:this.pageSize,
+          pageNum:this.pageNum,
+          address:this.$props.address,
+          name:this.meal_name
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tableData = res.records
+        this.total = res.total
+      })
+    },
+    updatedata(address) {
+      this.$props.address = address
+      console.log("jump to" + this.$props.address)
       console.log("update")
       this.load()
     },
@@ -136,7 +154,12 @@ export default {
       this.form = {}
     },
     deleteMeal(meal){//向后台请求删除数据,参数:meal_id
-      this.request.delete("/meal/"+meal+this.userid).then(res =>{
+      this.request.get("/meal/deletemeal",{
+        params:{
+          mealid:meal,
+          userid:this.$props.userid,
+        }
+      }).then(res =>{
         if(res){
           this.$message.success("删除成功:)")
           this.load()
@@ -146,8 +169,13 @@ export default {
       })
     },
     handleLike(id){//向后台请求点赞,参数:meal_id,userid
-      console.log("点赞")
-      this.request.post("/meal",id,this.userid).then(res =>{
+      console.log("点赞"+id)
+      this.request.get("/meal/like",{
+        params:{
+          mealid: id+0,
+          userid: this.$props.userid
+        }
+      }).then(res =>{
         if(res){
           this.$message.success("点赞成功:)")
           this.dialogFormVisible = false
@@ -158,7 +186,14 @@ export default {
       })
     },
     save(){//向后台发送新增和编辑数据,参数:form.meal_name,form.region(address)
-      this.request.post("/meal",this.form).then(res =>{
+      this.request.get("/meal/add", {
+        params:{//String name Integer price,Integer address, Integer userid
+          name:this.form.meal_name,
+          price:this.form.meal_price,
+          address:this.form.address,
+          userid: this.$props.userid,
+        }
+      }).then(res =>{
         if(res){
           this.$message.success("保存成功:)")
           this.dialogFormVisible = false

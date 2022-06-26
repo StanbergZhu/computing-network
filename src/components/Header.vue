@@ -4,9 +4,6 @@
       <span :class="collapseBtnClass" style="cursor: pointer" @click="collapse"></span>
     </div>
 
-    <el-dropdown style="width: 70px; cursor: pointer">
-      <span >{{username}}</span>
-    </el-dropdown>
   </div>
 
 </template>
@@ -17,7 +14,6 @@ export default {
   props:{
     collapseBtnClass: String,
     collapse: Function,
-    username: String,
   },
 }
 </script>

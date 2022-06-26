@@ -43,14 +43,13 @@ export default {
       this.$refs['userForm'].validate((valid) => {
         if (valid) {  // 表单校验合法
           this.request.post("/user/login", this.user).then(res => {
+            console.log(res.id)
             if(res.pass){//res有两个部分：pass（bool），userid
+              localStorage.setItem("userid",JSON.stringify(res.id))
+              localStorage.setItem("username",JSON.stringify(this.user.username))
               this.$message.success("登录成功")
               this.$router.push({
-                path:"/manager",
-                query: {
-                  username:this.user.username,
-                  userid:res.userid
-                }
+                path:"/",
               })
             } else {
               this.$message.error("登录失败:(")

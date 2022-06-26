@@ -6,14 +6,13 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/manager',
+    path: '/NJU_Gastronome',
     name: 'Manager',
     component: ()=>import('../views/Manager.vue'),
-    redirect:"/personal_page",
+    redirect:"/NJU_Gastronome/personal_page",
     children:[
       {path: 'personal_page', name: 'PersonalPage', component: () => import('../views/PersonalPage'),},
       {path: 'main_page', name: 'MainPage', component: () => import('../views/MainPage'),},
-
     ]
   },
   {

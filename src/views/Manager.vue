@@ -8,11 +8,11 @@
     <el-container>
 
       <el-header style="border-bottom: 1px solid #ccc;">
-        <Header :collapseBtnClass="collapseBtnClass" :collapse="collapse" :username="user_name"/>
+        <Header :collapseBtnClass="collapseBtnClass" :collapse="collapse"/>
       </el-header>
 
       <el-main>
-        <router-view :address="address" :username="user_name" :userid="user_id" ref="view"/>
+        <router-view :address="address" :username="user_name" :userid="user_id" ref="view" @updateUser="getUser"/>
       </el-main>
 
     </el-container>
@@ -33,15 +33,14 @@ export default {
       sideWidth:150,
       logoTextShow:true,
       user_name: "",
-      user_id:"",
+      user_id: 0,
       address: 1
     }
   },
 
   created() {
     //加载用户名
-    this.user_name = this.$route.query.username
-    this.user_id = this.$route.query.userid
+    this.getUser()
   },
   components:{
     Aside,
@@ -60,10 +59,16 @@ export default {
         this.logoTextShow = true
       }
     },
+    getUser(){
+      let username = JSON.parse(localStorage.getItem("username"))
+      let userid = JSON.parse(localStorage.getItem("userid"))
+      this.user_name = username
+      this.user_id = userid
+    },
     getAddress(msg){
       this.address = msg;
       console.log("get to "+this.address)
-      this.$refs.view.updatedata()
+      this.$refs.view.updatedata(this.address)
     }
   }
 }
