@@ -47,10 +47,6 @@ export default {
               this.$message.success("注册成功")
               this.$router.push({
                 path:"/",
-                query: {
-                  username:this.user.username,
-                  userid:res.userid
-                }
               })
             } else {
               this.$message.error("注册失败:(")
